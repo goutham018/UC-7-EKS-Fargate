@@ -1,0 +1,44 @@
+name: k8s
+on:
+  workflow_dispatch:
+ 
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    permissions:
+      id-token: write
+      contents: read
+ 
+    steps:
+    - name: Checkout Repo
+      uses: actions/checkout@v3
+ 
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+          role-to-assume: arn:aws:iam::273354635930:role/github-oidc
+          aws-region: us-east-1
+ 
+    - name: Setup kubectl
+      uses: azure/setup-kubectl@v3
+      with:
+        version: 'latest'
+ 
+    - name: Setup kubeconfig
+      run: |
+        aws eks update-kubeconfig --name my-eks-cluster --region us-east-1
+ 
+    - name: Deploy Appointment Service
+      run: |
+        kubectl apply -f app/appointment-service/appointment-deployment.yaml
+        kubectl apply -f app/appointment-service/appointment-service.yaml
+ 
+    - name: Deploy Patient Service
+      run: |
+        kubectl apply -f app/patient-service/patient-deployment.yaml
+        kubectl apply -f app/patient-service/patient-service.yaml
+ 
+    - name: Apply Shared Ingress
+      run: |
+        kubectl apply -f app/nginx-ingress.yaml
