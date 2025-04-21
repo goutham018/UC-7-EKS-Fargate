@@ -5,8 +5,8 @@ on:
 
 env:
   AWS_REGION: us-east-1
-  ECR_REPOSITORY-PS: patient-service
-  ECR_REPOSITORY-AS: appointment-service
+  ECR_REPOSITORY_PS: patient-service
+  ECR_REPOSITORY_AS: appointment-service
   IMAGE_TAG: latest
   AWS_ACCOUNT_ID: 273354635930
 
@@ -30,8 +30,8 @@ jobs:
   
       - name: Create ECR
         run: |
-          aws ecr create-repository --repository-name $ECR_REPOSITORY-PS || echo "Repository already exists"
-          aws ecr create-repository --repository-name $ECR_REPOSITORY-AS || echo "Repository already exists"
+          aws ecr create-repository --repository-name $ECR_REPOSITORY_PS || echo "Repository already exists"
+          aws ecr create-repository --repository-name $ECR_REPOSITORY_AS || echo "Repository already exists"
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
@@ -43,16 +43,16 @@ jobs:
 
       - name: Build patient-service Docker image
         run: |
-          docker build -t $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$ECR_REPOSITORY-PS:$IMAGE_TAG -f app/patient-service/Dockerfile app/patient-service
+          docker build -t $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$ECR_REPOSITORY_PS:$IMAGE_TAG -f app/patient-service/Dockerfile app/patient-service
 
       - name: Build appointment-service Docker image
         run: |
-          docker build -t $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$ECR_REPOSITORY-AS:$IMAGE_TAG -f app/appointment-service/Dockerfile app/appointment-service
+          docker build -t $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$ECR_REPOSITORY_AS:$IMAGE_TAG -f app/appointment-service/Dockerfile app/appointment-service
 
       - name: Push patient-service Docker image to ECR
         run: |
-          docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$ECR_REPOSITORY-PS:$IMAGE_TAG
+          docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$ECR_REPOSITORY_PS:$IMAGE_TAG
           
       - name: Push appointment-service Docker image to ECR
         run: |
-          docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$ECR_REPOSITORY-AS:$IMAGE_TAG
+          docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$ECR_REPOSITORY_AS:$IMAGE_TAG
