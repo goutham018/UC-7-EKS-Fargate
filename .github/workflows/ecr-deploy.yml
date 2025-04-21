@@ -40,7 +40,7 @@ jobs:
 
       - name: Build appointment-service Docker image
         run: |
-          docker build -t 273354635930.dkr.ecr.us-east-1.amazonaws.com//appointment-service:latest -f app/appointment-service/Dockerfile app/appointment-service
+          docker build -t 273354635930.dkr.ecr.us-east-1.amazonaws.com/appointment-service:latest -f app/appointment-service/Dockerfile app/appointment-service
 
       - name: Push patient-service Docker image to ECR
         run: |
