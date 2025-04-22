@@ -65,7 +65,6 @@ data "aws_eks_cluster_auth" "main" {
 }
 
 resource "kubernetes_config_map" "aws_auth" {
-  provider = kubernetes
   metadata {
     name      = "aws-auth"
     namespace = "kube-system"
@@ -73,19 +72,21 @@ resource "kubernetes_config_map" "aws_auth" {
   data = {
     mapRoles = jsonencode([
       {
-        rolearn  = module.iam.fargate_pod_execution_role_arn
+        rolearn = module.eks_fargate.eks_fargate_pod_execution_role_arn
         username = "system:node:{{EC2PrivateDNSName}}"
-        groups   = ["system:bootstrappers", "system:nodes"]
-      },
+        groups = ["system:bootstrappers", "system:nodes"]
+      }
     ])
     mapUsers = jsonencode([
-      {
-        userarn  = "arn:aws:iam::273354635930:user/aws-eks-user"
-        username = "aws-eks-user"
-        groups   = ["system:masters"]
-      },
-    ])
+  {
+    userarn = "arn:aws:iam::877786395093:user/vamsee.techops"
+    username = "vamsee.techops"
+    groups = [
+      "system:masters"
+    ]
   }
+])
+}
 }
 
 provider "helm" {
