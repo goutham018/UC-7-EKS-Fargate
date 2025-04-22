@@ -1,34 +1,34 @@
 variable "environment" {
   type        = string
-  description = "Environment name (e.g., dev)"
+  description = "Environment name"
 }
 
-variable "aws_region" {
+variable "cluster_name" {
   type        = string
-  description = "AWS region"
+  description = "Name of the EKS cluster"
 }
 
-variable "vpc_cidr" {
+variable "eks_version" {
   type        = string
-  description = "CIDR block for the VPC"
+  description = "Version of Kubernetes for the EKS cluster"
 }
 
-variable "public_subnet_cidr_az1" {
+variable "eks_cluster_role_arn" {
   type        = string
-  description = "CIDR block for the public subnet in AZ-a"
+  description = "ARN of the IAM role for the EKS cluster"
 }
 
-variable "public_subnet_cidr_az2" {
+variable "eks_cluster_security_group_id" {
   type        = string
-  description = "CIDR block for the public subnet in AZ-b"
+  description = "Security group ID for the EKS cluster"
 }
 
-variable "private_subnet_cidr_az1" {
-  type        = string
-  description = "CIDR block for the private subnet in AZ-a"
+variable "private_subnet_ids" {
+  type        = list(string)
+  description = "List of private subnet IDs for the EKS cluster"
 }
 
-variable "private_subnet_cidr_az2" {
+variable "fargate_pod_execution_role_arn" {
   type        = string
-  description = "CIDR block for the private subnet in AZ-b"
+  description = "ARN of the IAM role for Fargate pod execution"
 }
