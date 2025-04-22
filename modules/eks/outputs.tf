@@ -1,14 +1,19 @@
-output "eks_cluster_id" {
-  value       = aws_eks_cluster.main.id
-  description = "ID of the EKS cluster"
+output "cluster_name" {
+  value       = aws_eks_cluster.main.name
+  description = "Name of the EKS cluster"
 }
 
-output "eks_cluster_endpoint" {
+output "cluster_endpoint" {
   value       = aws_eks_cluster.main.endpoint
-  description = "Endpoint of the EKS cluster"
+  description = "EKS cluster endpoint"
 }
 
-output "eks_cluster_kubeconfig_certificate_authority_data" {
+output "cluster_certificate_authority_data" {
   value       = aws_eks_cluster.main.certificate_authority.0.data
-  description = "Certificate authority data for kubeconfig"
+  description = "EKS cluster certificate authority data"
+}
+
+output "cluster_id" {
+  value       = aws_eks_cluster.main.id
+  description = "EKS cluster ID"
 }
