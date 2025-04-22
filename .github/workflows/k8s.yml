@@ -1,41 +1,49 @@
-name: k8s
+name: Terraform Infra
+
 on:
   workflow_dispatch:
- 
+    inputs:
+      action:
+        description: 'Action to perform (apply or destroy)'
+        required: true
+
+permissions:
+  id-token: write
+  contents: read
+
 jobs:
-  deploy:
+  terraform:
     runs-on: ubuntu-latest
-    permissions:
-      id-token: write
-      contents: read
- 
+
     steps:
-    - name: Simple Echo
-      run: echo "Hello from the runner!"
-        
-    - name: Checkout Repo
-      uses: actions/checkout@v3
- 
-    - name: Configure AWS credentials
-      uses: aws-actions/configure-aws-credentials@v1
-      with:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up AWS credentials with OIDC
+        uses: aws-actions/configure-aws-credentials@v3
+        with:
           role-to-assume: arn:aws:iam::273354635930:role/github-oidc
           aws-region: us-east-1
- 
-    - name: Setup kubeconfig
-      run: |
-        aws eks update-kubeconfig --name my-eks-cluster --region us-east-1
- 
-    - name: Deploy Appointment Service
-      run: |
-        kubectl apply -f app/appointment-service/appointment-deployment.yml --validate=false
-        kubectl apply -f app/appointment-service/appointment-service.yml
- 
-    - name: Deploy Patient Service
-      run: |
-        kubectl apply -f app/patient-service/patient-deployment.yml
-        kubectl apply -f app/patient-service/patient-service.yml
- 
-    - name: Apply Shared Ingress
-      run: |
-        kubectl apply -f app/nginx-ingress.yml
+
+      - name: Set up Terraform
+        uses: hashicorp/setup-terraform@v1
+
+      - name: Terraform Init
+        run: terraform init
+
+      - name: Terraform fmt
+        run: terraform fmt
+        
+      - name: Terraform validate
+        run: terraform validate
+        
+      - name: Terraform plan
+        run: terraform plan
+
+      - name: Terraform Apply or Destroy
+        run: |
+              if [ "${{ github.event.inputs.action }}" == "apply" ]; then
+                terraform apply -var-file="../environments/dev/terraform.tfvars" -auto-approve
+              elif [ "${{ github.event.inputs.action }}" == "destroy" ]; then
+                terraform destroy -var-file="../environments/dev/terraform.tfvars" -auto-approve
+              fi
