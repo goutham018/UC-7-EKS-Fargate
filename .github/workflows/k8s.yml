@@ -28,14 +28,14 @@ jobs:
  
     - name: Deploy Appointment Service
       run: |
-        kubectl apply -f app/appointment-service/appointment-deployment.yml --validate=false
-        kubectl apply -f app/appointment-service/appointment-service.yml --validate=false
+        kubectl apply -f app/appointment-service/appointment-deployment.yml
+        kubectl apply -f app/appointment-service/appointment-service.yml
  
     - name: Deploy Patient Service
       run: |
-        kubectl apply -f app/patient-service/patient-deployment.yml --validate=false
-        kubectl apply -f app/patient-service/patient-service.yml --validate=false
+        kubectl apply -f app/patient-service/patient-deployment.yml
+        kubectl apply -f app/patient-service/patient-service.yml
  
     - name: Apply Shared Ingress
       run: |
-        kubectl apply -f app/nginx-ingress.yml --validate=false
+        kubectl apply -f app/nginx-ingress.yml
