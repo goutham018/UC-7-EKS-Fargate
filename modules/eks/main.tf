@@ -10,10 +10,8 @@ resource "aws_eks_cluster" "main" {
 
   version = var.eks_version
 
-  depends_on = [
-    aws_iam_role_policy_attachment.eks_cluster_policy,
-    aws_iam_role_policy_attachment.eks_vpc_cni_policy,
-  ]
+  # Remove direct module dependencies
+  depends_on = []
 
   tags = {
     Environment = var.environment
@@ -23,7 +21,7 @@ resource "aws_eks_cluster" "main" {
 
 resource "aws_eks_fargate_profile" "main" {
   cluster_name = aws_eks_cluster.main.name
-  name_prefix  = "${var.environment}-fargate"
+  fargate_profile_name = "${var.environment}-fargate"
   pod_execution_role_arn = var.fargate_pod_execution_role_arn
   subnet_ids = var.private_subnet_ids
 

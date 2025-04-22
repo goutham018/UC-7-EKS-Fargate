@@ -11,8 +11,8 @@ provider "aws" {
   region = var.aws_region
 }
 
-module "network" {
-  source = "./modules/network"
+module "vpc" { # Changed "network" to "vpc" here
+  source = "./modules/vpc"
 
   environment             = var.environment
   aws_region              = var.aws_region
@@ -27,7 +27,7 @@ module "iam" {
   source = "./modules/iam"
 
   environment = var.environment
-  vpc_id      = module.network.vpc_id
+  vpc_id      = module.vpc.vpc_id # Changed "network" to "vpc" here
 }
 
 module "eks" {
@@ -38,22 +38,22 @@ module "eks" {
   eks_version                 = var.eks_version
   eks_cluster_role_arn        = module.iam.eks_cluster_role_arn
   eks_cluster_security_group_id = module.iam.eks_cluster_security_group_id
-  private_subnet_ids          = module.network.private_subnet_ids
+  private_subnet_ids          = module.vpc.private_subnet_ids # Changed "network" to "vpc" here
   fargate_pod_execution_role_arn = module.iam.fargate_pod_execution_role_arn
 }
 
 output "vpc_id" {
-  value       = module.network.vpc_id
+  value       = module.vpc.vpc_id # Changed "network" to "vpc" here
   description = "ID of the VPC"
 }
 
 output "public_subnet_ids" {
-  value       = module.network.public_subnet_ids
+  value       = module.vpc.public_subnet_ids # Changed "network" to "vpc" here
   description = "List of public subnet IDs"
 }
 
 output "private_subnet_ids" {
-  value       = module.network.private_subnet_ids
+  value       = module.vpc.private_subnet_ids # Changed "network" to "vpc" here
   description = "List of private subnet IDs"
 }
 

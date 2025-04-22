@@ -19,14 +19,14 @@ resource "aws_iam_role" "eks_cluster" {
 resource "aws_iam_policy_attachment" "eks_cluster_policy" {
   name       = "${var.environment}-eks-cluster-policy-attachment"
   policy_arn = "arn:aws:iam::aws:policy/AmazonEKSClusterPolicy"
-  role       = aws_iam_role.eks_cluster.name
+  roles      = [aws_iam_role.eks_cluster.name] # Changed from 'role' to 'roles'
 }
 
-resource "aws_iam_policy_attachment" "eks_vpc_cni_policy" {
-  name       = "${var.environment}-eks-vpc-cni-policy-attachment"
-  policy_arn = "arn:aws:iam::aws:policy/AmazonEKSCNIPolicy"
-  role       = aws_iam_role.eks_cluster.name
-}
+# resource "aws_iam_policy_attachment" "eks_vpc_cni_policy" {
+#   name       = "${var.environment}-eks-vpc-cni-policy-attachment"
+#   policy_arn = "arn:aws:iam::aws:policy/AmazonEKSCNIPolicy"
+#   roles      = [aws_iam_role.eks_cluster.name]
+# }
 
 resource "aws_iam_role" "fargate_pod_execution" {
   name = "${var.environment}-fargate-pod-execution-role"
@@ -49,7 +49,7 @@ resource "aws_iam_role" "fargate_pod_execution" {
 resource "aws_iam_policy_attachment" "fargate_pod_execution_policy" {
   name       = "${var.environment}-fargate-pod-execution-policy-attachment"
   policy_arn = "arn:aws:iam::aws:policy/AmazonEKSFargatePodExecutionRolePolicy"
-  role       = aws_iam_role.fargate_pod_execution.name
+  roles      = [aws_iam_role.fargate_pod_execution.name] # Changed from 'role' to 'roles'
 }
 
 resource "aws_security_group" "eks_cluster" {
