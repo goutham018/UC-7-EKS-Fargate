@@ -6,9 +6,9 @@ jobs:
   deploy:
     runs-on: self-hosted
 
-    # permissions:
-    #   id-token: write
-    #   contents: read
+    permissions:
+      id-token: write
+      contents: read
  
     steps:
     - name: Simple Echo
@@ -22,11 +22,6 @@ jobs:
       with:
           role-to-assume: arn:aws:iam::273354635930:role/github-oidc
           aws-region: us-east-1
- 
-    - name: Setup kubectl
-      uses: azure/setup-kubectl@v3
-      with:
-        version: 'latest'
  
     - name: Setup kubeconfig
       run: |
