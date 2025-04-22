@@ -50,12 +50,18 @@ module "eks" {
   fargate_pod_execution_role_arn = module.iam.fargate_pod_execution_role_arn
 }
 
-# data "aws_eks_cluster_auth" "main" {
-#   name = module.eks.cluster_name # Changed line
-# }
+provider "kubernetes" {
+  host                   = module.eks.cluster_endpoint
+  token                  = data.aws_eks_cluster_auth.main.token
+  cluster_ca_certificate = base64decode(module.eks.cluster_certificate_authority_data)
+}
+
+data "aws_eks_cluster" "main" {
+  name = module.eks.cluster_name
+}
 
 data "aws_eks_cluster_auth" "main" {
-  name = module.eks.cluster_name # Changed line
+  name = module.eks.cluster_name
 }
 
 resource "kubernetes_config_map" "aws_auth" {
@@ -80,12 +86,6 @@ resource "kubernetes_config_map" "aws_auth" {
       },
     ])
   }
-}
-
-provider "kubernetes" {
-  host                   = module.eks.cluster_endpoint
-  token                  = data.aws_eks_cluster_auth.main.token
-  cluster_ca_certificate = base64decode(module.eks.cluster_certificate_authority_data)
 }
 
 provider "helm" {
