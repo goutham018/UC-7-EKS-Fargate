@@ -11,6 +11,9 @@ jobs:
       contents: read
  
     steps:
+    - name: Simple Echo
+      run: echo "Hello from the runner!"
+        
     - name: Checkout Repo
       uses: actions/checkout@v3
  
