@@ -19,7 +19,7 @@ spec:
         command: ['sh', '-c', 'echo init container initializing && sleep 5']
       containers:
       - name: patient-app
-        image: balure/patient
+        image: 273354635930.dkr.ecr.us-east-1.amazonaws.com/patient-service:latest
         ports:
         - containerPort: 3000
         resources:
