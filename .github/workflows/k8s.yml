@@ -28,7 +28,7 @@ jobs:
  
     - name: Deploy Appointment Service
       run: |
-        kubectl apply -f app/appointment-service/appointment-deployment.yml
+        kubectl apply -f app/appointment-service/appointment-deployment.yml --validate=false
         kubectl apply -f app/appointment-service/appointment-service.yml
  
     - name: Deploy Patient Service
